@@ -47,25 +47,20 @@ from PIL import Image, ImageFilter, ImageDraw, ImageFont
 def z3():
         input_folder = "input_images"
         output_folder = "output_images"
-        # Перебираем файлы в папке
+
         for filename in os.listdir(input_folder):
-            if filename.endswith((".jpg")):  # Обрабатываем только изображения
+            if filename.endswith((".jpg")):
                 try:
-                    # Открываем изображение
+
                     image_path = os.path.join(input_folder, filename)
                     img = Image.open(image_path)
 
-                    # Применяем фильтр
-
                     filtered_img = img.filter(ImageFilter.EDGE_ENHANCE)
 
-
-                    # Формируем имя для нового файла
                     name, ext = os.path.splitext(filename)
                     new_filename = f"{name}_filtered{ext}"
                     output_path = os.path.join(output_folder, new_filename)
 
-                    # Сохраняем обработанное изображение
                     filtered_img.save(output_path)
                     print(f"Файл '{filename}' обработан и сохранен как '{new_filename}'")
 
@@ -78,28 +73,20 @@ def z3():
 
 def z4():
 
-    image_path = "main-image.jpg"  # ЗАМЕНИТЕ НА СВОЙ ПУТЬ
-    watermark_text = "Sun sun sun"  # ЗАМЕНИТЕ НА СВОЙ ТЕКСТ
-    output_path = "watermarked_main-image.png"  # ЗАМЕНИТЕ НА СВОЙ ПУТЬ
+    image_path = "main-image.jpg"
+    watermark_text = "Sun sun sun"
+    output_path = "watermarked_main-image.png"
 
 
     try:
-            img = Image.open(image_path).convert("RGBA")  # Открываем и конвертируем в RGBA
+            img = Image.open(image_path).convert("RGBA")
             draw = ImageDraw.Draw(img)
 
-            # Указываем шрифт (можно заменить на свой, если нужно)
-            font = ImageFont.truetype("arial.ttf", size=30)  # Пробуем arial, размер 30
+            font = ImageFont.truetype("arial.ttf", 30)
 
-            # Рассчитываем позицию текста (внизу справа)
-            text_width, text_height = draw.textbbox(watermark_text, font=font)
-            x = img.width - text_width - 10
-            y = img.height - text_height - 10
+            draw.text((50, 50), watermark_text, font=font, fill=(255, 255, 255, 128))
 
-            # Наносим водяной знак (белый, полупрозрачный)
-            draw.text((x, y), watermark_text, font=font, fill=(255, 255, 255, 128))  # Белый, полупрозрачный
-
-            # Сохраняем результат
-            img.save(output_path, "PNG")  # Сохраняем в PNG, чтобы альфа-канал работал
+            img.save(output_path, "PNG")
             print(f"Водяной знак добавлен и сохранен в {output_path}")
 
     except FileNotFoundError:
